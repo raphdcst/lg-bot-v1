@@ -13,7 +13,7 @@ export default new app.Table<Player>({
   setup: (table) => {
     table.uuid("_id", { primaryKey: true })
     table.bigInteger("discordId").unique().notNullable()
-    table.integer("role")
-    table.boolean("alive")
+    table.integer("role").notNullable()
+    table.boolean("alive").defaultTo(true)
   },
 })
