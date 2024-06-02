@@ -3,7 +3,7 @@ import { UUID } from "crypto"
 
 export interface Guild {
   _id: UUID
-  guildId: number
+  id: number
   prefix: string | null
 }
 
@@ -11,7 +11,7 @@ export default new app.Table<Guild>({
   name: "guild",
   setup: (table) => {
     table.uuid("_id", { primaryKey: true })
-    table.bigInteger("guildId").unique().notNullable()
+    table.bigInteger("id").unique().notNullable()
     table.string("prefix")
   },
 })
