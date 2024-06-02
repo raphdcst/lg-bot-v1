@@ -3,7 +3,7 @@ import guildTable from "#tables/guild.js"
 
 export default new app.Command({
   name: "prefix",
-  description: "Edit or show the bot prefix",
+  description: "Edit if option provided, or show the bot prefix",
   guildOwnerOnly: true,
   channelType: "guild",
   positional: [
