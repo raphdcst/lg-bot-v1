@@ -6,7 +6,7 @@ export interface Role {
   title: string
   description: string
   side: string
-  aura: string
+  aura: number
 }
 
 export default new app.Table<Role>({
