@@ -3,8 +3,8 @@
 import * as app from "#app"
 
 export default new app.Command({
-  name: "help",
-  description: "Help menu",
+  name: "commands",
+  description: "Commands menu",
   longDescription: "Show command details or list all commands",
   channelType: "all",
   aliases: ["h", "usage", "detail", "details"],
