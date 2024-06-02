@@ -1,16 +1,17 @@
 import * as app from "#app"
+import { UUID } from "crypto"
 
 export interface Guild {
-  _id: number
-  id: string
+  _id: UUID
+  guildId: string
   prefix: string | null
 }
 
 export default new app.Table<Guild>({
   name: "guild",
   setup: (table) => {
-    table.increments("_id", { primaryKey: true }).unsigned()
-    table.string("id").unique().notNullable()
+    table.uuid("_id", { primaryKey: true })
+    table.string("guildId").unique().notNullable()
     table.string("prefix")
   },
 })
