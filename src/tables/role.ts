@@ -1,5 +1,4 @@
 import * as app from "#app"
-import { UUID } from "crypto"
 
 export interface Role {
   _id: number

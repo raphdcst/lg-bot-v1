@@ -25,7 +25,7 @@ export default new app.Command({
 
     await guildTable.query
       .insert({
-        id: message.guild.id,
+        id: parseInt(message.guild.id),
         prefix: prefix,
       })
       .onConflict("id")
