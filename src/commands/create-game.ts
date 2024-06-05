@@ -17,7 +17,12 @@ export default new app.Command({
     },
   ],
   async run(message) {
-    // todo: code here
-    return message.channel.send(`Provided options : ${message.args.lap} mins and ${message.args.template}`)
+
+    const author = message.client.user
+
+    const newGame = await app.createGame(author) 
+
+    return message.channel.send(`New game created : ${newGame.gameId}`)
+    // return message.channel.send(`New game created (\`${id}\`) with the following options : ${message.args.lap} mins and ${message.args.template}`)
   }
 })
