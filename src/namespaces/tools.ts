@@ -1,9 +1,9 @@
 import * as app from "#app"
 
-import guildTable from "#tables/guild.js"
+import guildTable from "#tables/guild.ts"
 
 export async function getGuildPrefix(guild?: app.Guild | null): Promise<string> {
-  let prefix = process.env.BOT_PREFIX as string
+  const prefix = process.env.BOT_PREFIX as string
   
   if (guild) {
     const guildData = await guildTable.query

@@ -19,7 +19,8 @@
     "format": "prettier --write src tests",
     "update": "gulp update",
     "readme": "gulp readme",
-    "test": "tsc --noEmit && npm run start.test"
+    "test": "npm run lint && tsc --noEmit && npm run start.test",
+    "lint": "eslint src/**/*.ts --fix"
   },
   "prettier": {
     "semi": false,
@@ -48,7 +49,8 @@
     "figlet": "^1.5.2",
     "ghom-eval": "^1.1.3",
     "ghom-prettify": "^3.0.0",
-    "knex": "^3.1.0",
+    "gulp-replace": "^1.1.4",
+    "knex": "^3.0.1",
     "pg": "latest",
     "prettier": "^3.2.5",
     "regex-parser": "^2.2.11",
@@ -82,7 +84,13 @@
     "gulp-rename": "^2.0.0",
     "nodemon": "^2.0.19",
     "typescript": "^5.4.0-beta",
-    "vinyl-paths": "^4.0.0"
+    "vinyl-paths": "^4.0.0",
+    "@typescript-eslint/eslint-plugin": "^7.12.0",
+    "@typescript-eslint/parser": "^7.12.0",
+    "eslint": "^8.57.0",
+    "eslint-import-resolver-alias": "^1.1.2",
+    "eslint-plugin-import": "^2.29.1",
+    "gulp-replace": "^1.1.4"
   },
   "engines": {
     "node": ">=20.x.x",

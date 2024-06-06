@@ -1,5 +1,6 @@
 import * as app from '#app'
-import guildTable from "#tables/guild.js"
+import guildTable from "#tables/guild.ts"
+import { randomUUID } from 'crypto'
 
 export default new app.Command({
   name: "prefix",
@@ -25,6 +26,7 @@ export default new app.Command({
 
     await guildTable.query
       .insert({
+        _id: randomUUID(),
         id: parseInt(message.guild.id),
         prefix: prefix,
       })

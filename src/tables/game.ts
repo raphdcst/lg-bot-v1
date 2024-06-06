@@ -1,9 +1,9 @@
 import * as app from "#app"
 import { UUID } from "crypto"
-import { Player } from "#tables/player"
+import { Player } from "#tables/player.ts"
 
 export interface Game<Player> {
-  _id: UUID | undefined
+  _id: UUID
   gameId: string
   running: boolean
   lap: number

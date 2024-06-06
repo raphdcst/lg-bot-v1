@@ -1,7 +1,8 @@
 import * as app from "#app"
 import ShortUniqueId from "short-unique-id"
-import gameTable, { Game } from "#app/tables/game.js"
-import playerTable, { Player } from "#app/tables/player.js"
+import gameTable, { Game } from "#tables/game.ts"
+import playerTable, { Player } from "#tables/player.ts"
+import { randomUUID } from "crypto"
 
 export function genId(char: number): string {
     const id = new ShortUniqueId({ length: char})
@@ -12,8 +13,9 @@ export function genId(char: number): string {
 export async function createPlayer(user: app.User): Promise<Player> {
 
     const newPlayer = await playerTable.query.insert({
+        _id: randomUUID(),
         discordId: parseInt(user.id)
-    }).returning(['_id', 'discordId', 'role', 'alive']) as Player
+    }).returning(['_id', 'discordId', 'alive']) as Player
 
     return newPlayer
 }
@@ -21,6 +23,7 @@ export async function createPlayer(user: app.User): Promise<Player> {
 export async function createGame(user: app.User): Promise<Game<Player>> {
 
     const newGame = await gameTable.query.insert({
+        _id: randomUUID(),
         gameId: genId(5),
         created_at: Date.now(),
         players: [await createPlayer(user)]
