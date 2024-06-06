@@ -1,10 +1,7 @@
 import * as app from "#app"
 import ShortUniqueId from "short-unique-id"
-import gameTable from "#app/tables/game"
-import playerTable from "#app/tables/player"
-import { Game } from "#app/tables/game"
-import { Player } from "#app/tables/player"
-
+import gameTable, { Game } from "#app/tables/game.js"
+import playerTable, { Player } from "#app/tables/player.js"
 
 export function genId(char: number): string {
     const id = new ShortUniqueId({ length: char})
