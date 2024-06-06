@@ -2,4 +2,4 @@
 
 In dev...
 
-LG bot, made by [@ceyro](https://discord.com/app) and [@le.coq](https://discord.com/app)
+LG bot, by [@ceyro](https://github.com/Ceyro40) and [@le.coq](https://github.com/raphdcst)
