@@ -1,24 +1,23 @@
 import * as app from "#app"
-import { UUID } from "crypto"
 import { Player } from "#tables/player.ts"
 
-export interface Game<Player> {
-  _id: UUID
+export interface Game {
+  _id: string
   gameId: string
   running: boolean
   lap: number
   "created_at": number
-  players: Player[]
+  players: Pick<Player, "_id">[]
 }
 
-export default new app.Table<Game<Player>>({
+export default new app.Table<Game>({
   name: "game",
   setup: (table) => {
-    table.uuid("_id", { primaryKey: true })
+    table.string("_id").primary()
     table.string("gameId").notNullable()
     table.boolean("running").defaultTo(true)
     table.integer("lap").defaultTo(1)
-    table.integer('created_at')
-    table.jsonb("players").notNullable()
+    table.bigInteger('created_at')
+    table.jsonb("players").defaultTo([])
   },
 })

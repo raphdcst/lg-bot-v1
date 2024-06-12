@@ -1,19 +1,21 @@
 import * as app from "#app"
-import { UUID } from "crypto"
+import { Game } from "#tables/game.ts"
 
 export interface Player {
-  _id: UUID
+  _id: string
   discordId: number
   // role: number | undefined
   alive: boolean
+  games: Pick<Game, "_id">[]
 }
 
 export default new app.Table<Player>({
   name: "player",
   setup: (table) => {
-    table.uuid("_id", { primaryKey: true })
+    table.string("_id").primary()
     table.bigInteger("discordId").unique().notNullable()
     // table.integer("role").references("id").inTable("role")
     table.boolean("alive").defaultTo(true)
+    table.jsonb("games").defaultTo([])
   },
 })
