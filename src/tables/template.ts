@@ -23,7 +23,7 @@ export interface Template {
 export default new app.Table<Template>({
   name: "template",
   setup: (table) => {
-    table.uuid("_id", { primaryKey: true })
+    table.increments("_id", { primaryKey: true }).unsigned()
     table.string("name").notNullable().unique()
     table.integer("Infect Pere Des Loups").defaultTo(0)
     table.integer("Loup Garou Voyant").defaultTo(0)

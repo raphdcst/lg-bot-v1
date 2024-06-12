@@ -20,9 +20,9 @@ export default new app.Command({
 
     const author = message.client.user
 
-    const newGame = await app.createGame(author) 
+    const [game, player] = await app.createPlayer(author)
 
-    return message.channel.send(`New game created : ${newGame.gameId}`)
+    return message.channel.send(`New game created (${game}) by player ${player}`)
     // return message.channel.send(`New game created (\`${id}\`) with the following options : ${message.args.lap} mins and ${message.args.template}`)
   }
 })
