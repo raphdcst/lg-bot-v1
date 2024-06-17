@@ -6,7 +6,7 @@ export interface Player {
   discordId: number
   // role: number | undefined
   alive: boolean
-  games: Pick<Game, "_id">[]
+  games: Object
 }
 
 export default new app.Table<Player>({
@@ -16,6 +16,6 @@ export default new app.Table<Player>({
     table.bigInteger("discordId").unique().notNullable()
     // table.integer("role").references("id").inTable("role")
     table.boolean("alive").defaultTo(true)
-    table.jsonb("games").defaultTo([])
+    table.jsonb("games").defaultTo({})
   },
 })

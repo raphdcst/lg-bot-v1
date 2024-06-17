@@ -10,15 +10,19 @@ export function genId(char: number): string {
     return id.rnd()
 }
 
-export async function findOrCreatePlayer(user: app.User): Promise<string | undefined> {
+export async function findOrCreatePlayer(user: app.User): Promise<string> {
 
-    const data = await playerTable.query.where('discordId', parseInt(user.id)).first().returning('_id')
+    const data = await playerTable.query.where('discordId', parseInt(user.id)).returning('*')
+
+    console.log(data)
 
     if (data) {
 
+
+
         const existing = data[0]?._id
 
-        console.log(`User ${existing} already exists in db`)
+        console.log(`Player "${existing}" already exists in db`)
 
         return existing
 
@@ -26,7 +30,7 @@ export async function findOrCreatePlayer(user: app.User): Promise<string | undef
 
     else {
 
-        console.log(`Creating user in db...`)
+        console.log(`Creating player in db...`)
 
         return createPlayer(user)
     }
@@ -42,32 +46,33 @@ export async function createPlayer(user: app.User): Promise<string> {
         .returning('_id')
         .onConflict("discordId")
         .merge(['discordId', 'alive', 'games'])
-        .returning('_id')
+        .returning('*')
 
     console.log(data)
 
     const newPlayer = data[0]._id
 
-    console.log(newPlayer)
+    console.log(`Created new player : ${newPlayer}`)
 
     return newPlayer
 }
 
-export async function createGame(user: app.User): Promise<[string, string | undefined]> {
+export async function createGame(user: app.User): Promise<[string, string]> {
 
-    const author: string | undefined = await findOrCreatePlayer(user)
+    const author: string = await findOrCreatePlayer(user)
 
     const data = await gameTable.query.insert({
         _id: genId(12),
         gameId: genId(5),
         created_at: Date.now(),
-    }).returning('_id')
+        players: { 1: author }
+    }).returning('*')
 
     console.log(data)
 
-    const newGame = data[0]._id
+    const newGame = data[0].gameId
 
-    console.log(newGame)
+    console.log(`Created new game : ${newGame}`)
 
     return [newGame, author]
 }
