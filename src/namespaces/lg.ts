@@ -1,8 +1,10 @@
 import * as app from "#app"
 import ShortUniqueId from "short-unique-id"
 import gameTable from "#tables/game.ts"
-import playerTable from "#tables/player.ts"
+import lgUserTable from "#tables/lgUser.ts"
 
+
+const createLogger = new app.Logger({ section: "create" })
 
 export function genId(char: number): string {
     const id = new ShortUniqueId({ length: char })
@@ -12,17 +14,15 @@ export function genId(char: number): string {
 
 export async function findOrCreatePlayer(user: app.User): Promise<string> {
 
-    const data = await playerTable.query.where('discordId', parseInt(user.id)).returning('*')
+    const data = await lgUserTable.query.where('discordId', parseInt(user.id)).returning('*')
 
     console.log(data)
 
-    if (data) {
+    if (data[0]) {
 
+        const existing = data[0]._id
 
-
-        const existing = data[0]?._id
-
-        console.log(`Player "${existing}" already exists in db`)
+        app.log(`Player "${existing}" already exists in db`)
 
         return existing
 
@@ -30,7 +30,7 @@ export async function findOrCreatePlayer(user: app.User): Promise<string> {
 
     else {
 
-        console.log(`Creating player in db...`)
+        createLogger.log(`Creating player in db...`)
 
         return createPlayer(user)
     }
@@ -39,40 +39,59 @@ export async function findOrCreatePlayer(user: app.User): Promise<string> {
 
 export async function createPlayer(user: app.User): Promise<string> {
 
-    const data = await playerTable.query.insert({
-        _id: genId(12),
-        discordId: parseInt(user.id)
-    })
-        .returning('_id')
-        .onConflict("discordId")
-        .merge(['discordId', 'alive', 'games'])
-        .returning('*')
+    try {
+        const data = await lgUserTable.query.insert({
+            _id: genId(12),
+            discordId: parseInt(user.id),
+            username: user.username,
+            created_at: Date.now()
+        })
+            .returning('_id')
+            .onConflict("discordId")
+            .merge(['discordId', 'games', 'created_at', 'friends', 'guild', 'hated', 'is_admin', 'level', 'nickname', 'username', 'wallet'])
+            .returning('*')
 
-    console.log(data)
+        console.log(data)
 
-    const newPlayer = data[0]._id
+        const newPlayer = data[0]._id
 
-    console.log(`Created new player : ${newPlayer}`)
+        createLogger.success(`Created new player : ${newPlayer}`)
 
-    return newPlayer
+        return newPlayer
+    } catch (err: any) {
+        createLogger.error(`An error occured during the player insertion : `, err)
+
+        return err
+    }
+
 }
 
-export async function createGame(user: app.User): Promise<[string, string]> {
+export async function createGame(user: app.User, max_players: number, lap_duration?: number): Promise<[string, string]> {
 
-    const author: string = await findOrCreatePlayer(user)
+    try {
 
-    const data = await gameTable.query.insert({
-        _id: genId(12),
-        gameId: genId(5),
-        created_at: Date.now(),
-        players: { 1: author }
-    }).returning('*')
+        const author: string | void = await findOrCreatePlayer(user)
 
-    console.log(data)
+        const data = await gameTable.query.insert({
+            _id: genId(12),
+            gameId: genId(5),
+            created_at: Date.now(),
+            max_players: max_players,
+            lap_duration: lap_duration,
+            players: { 1: author }
+        }).returning('*')
 
-    const newGame = data[0].gameId
+        console.log(data)
 
-    console.log(`Created new game : ${newGame}`)
+        const newGame = data[0].gameId
 
-    return [newGame, author]
+        createLogger.success(`Created new game : ${newGame}`)
+
+        return [newGame, author]
+
+    } catch (err: any) {
+
+        createLogger.error(`An error occured during the game insertion : `, err)
+        return err 
+    }
 }
