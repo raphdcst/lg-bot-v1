@@ -29,7 +29,7 @@ export default new app.Command({
 
     const [game, player] = await app.createGame(author, max_players, lap_duration)
 
-    return message.channel.send(`New game created (\`${game}\`) by player \`${player}\`, with the following parameters : \n Max number of players : ${max_players} \n Lap duration : ${lap_duration}s`)
+    return message.channel.send(`New game created (\`${game}\`) by player \`${player}\`, with the following parameters : \n Max number of players : ${max_players} \n Lap duration : ${lap_duration ? lap_duration : 120}s`)
     // return message.channel.send(`New game created (\`${id}\`) with the following options : ${message.args.lap} mins and ${message.args.template}`)
   }
 })

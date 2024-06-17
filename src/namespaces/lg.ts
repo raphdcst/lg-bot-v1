@@ -77,7 +77,7 @@ export async function createGame(user: app.User, max_players: number, lap_durati
             gameId: genId(5),
             created_at: Date.now(),
             max_players: max_players,
-            lap_duration: lap_duration,
+            lap_duration: lap_duration ? lap_duration : 120,
             players: { 1: author }
         }).returning('*')
 
@@ -92,6 +92,6 @@ export async function createGame(user: app.User, max_players: number, lap_durati
     } catch (err: any) {
 
         createLogger.error(`An error occured during the game insertion : `, err)
-        return err 
+        return err
     }
 }
