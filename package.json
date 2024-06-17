@@ -1,6 +1,6 @@
 {
   "name": "lg-bot-v1",
-  "version": "v7.0.0-Senchu",
+  "version": "v8.0.0-Capi",
   "author": "ghom",
   "description": "Discord bot in TypeScript",
   "main": "dist/index.js",
@@ -62,7 +62,7 @@
   },
   "devDependencies": {
     "@esbuild/linux-x64": "^0.20.1",
-    "@ghom/bot.ts-cli": "^7.1.0",
+    "@ghom/bot.ts-cli": "^8.0.0",
     "@types/fancy-log": "^2.0.0",
     "@types/figlet": "^1.5.4",
     "@types/gulp-filter": "^3.0.34",
