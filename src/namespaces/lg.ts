@@ -1,13 +1,36 @@
 import * as app from "#app"
 import ShortUniqueId from "short-unique-id"
-import gameTable, { Game } from "#tables/game.ts"
-import playerTable, { Player } from "#tables/player.ts"
+import gameTable from "#tables/game.ts"
+import playerTable from "#tables/player.ts"
 
 
 export function genId(char: number): string {
     const id = new ShortUniqueId({ length: char })
 
     return id.rnd()
+}
+
+export async function findOrCreatePlayer(user: app.User): Promise<string | undefined> {
+
+    const data = await playerTable.query.where('discordId', parseInt(user.id)).first().returning('_id')
+
+    if (data) {
+
+        const existing = data[0]?._id
+
+        console.log(`User ${existing} already exists in db`)
+
+        return existing
+
+    }
+
+    else {
+
+        console.log(`Creating user in db...`)
+
+        return createPlayer(user)
+    }
+
 }
 
 export async function createPlayer(user: app.User): Promise<string> {
@@ -18,19 +41,21 @@ export async function createPlayer(user: app.User): Promise<string> {
     })
         .returning('_id')
         .onConflict("discordId")
-        .ignore()
+        .merge(['discordId', 'alive', 'games'])
         .returning('_id')
 
     console.log(data)
 
-    const newPlayer = data.map(player => player._id).join(', ')
+    const newPlayer = data[0]._id
+
+    console.log(newPlayer)
 
     return newPlayer
 }
 
-export async function createGame(user: app.User): Promise<[string, string]> {
+export async function createGame(user: app.User): Promise<[string, string | undefined]> {
 
-    const author = await createPlayer(user)
+    const author: string | undefined = await findOrCreatePlayer(user)
 
     const data = await gameTable.query.insert({
         _id: genId(12),
@@ -40,7 +65,9 @@ export async function createGame(user: app.User): Promise<[string, string]> {
 
     console.log(data)
 
-    const newGame= data.map(game => game._id).join(', ')
+    const newGame = data[0]._id
+
+    console.log(newGame)
 
     return [newGame, author]
 }
