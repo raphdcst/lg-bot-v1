@@ -23,15 +23,22 @@ export default new app.Command({
   ],
   async run(message) {
 
-    const lap_duration: number = message.args.lap_duration
-    const max_players: number = message.args.max_players
+    await app.createGame(message)
 
-    const result = await app.createGame(message, max_players, lap_duration)
+    // if (!message.args.max_players) return message.reply("Please provide a max number of players in your command...");
 
-    if (result instanceof Error) return;
+    // const user = message.author
+    // const lap_duration: number = message.args.lap_duration
+    // const max_players: number = message.args.max_players
 
-    const [game, gameId, author] = result
+    // const result = await app.createGame(message, max_players, lap_duration)
 
-    return message.channel.send(`New game created (\`${gameId}\`) by player \`${author}\`, with the following parameters : \n Max number of players : ${max_players} \n Lap duration : ${lap_duration ? lap_duration : 120}s`)
+    // if (result instanceof Error) return;
+
+    // const [game, gameId, author] = result
+
+    // return await app.createGameEmbed(message, game, user)
+
+    // return message.channel.send(`New game created (\`${gameId}\`) by player \`${author}\`, with the following parameters : \n Max number of players : ${max_players} \n Lap duration : ${lap_duration ? lap_duration : 120}s`)
   }
 })
