@@ -2,8 +2,8 @@ import * as app from "#app"
 
 export const config: app.Scrap<app.Config> = {
   ignoreBots: true,
-  getPrefix: (message) => {
-    return app.getGuildPrefix(message.guild)
+  getPrefix() {
+    return process.env.BOT_PREFIX!
   },
   client: {
     intents: [
