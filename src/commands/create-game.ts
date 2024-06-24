@@ -3,7 +3,7 @@ import * as app from "#app"
 export default new app.Command({
   name: "start",
   description: "Start a new LG game, with the provided settings",
-  channelType: "guild",
+  channelType: "all",
   positional: [
     {
       name: "max_players",
