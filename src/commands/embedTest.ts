@@ -3,7 +3,7 @@ import * as app from "#app"
 export default new app.Command({
   name: "embedTest",
   botOwnerOnly: true,
-  description: "The embedTest command",
+  description: "A command to send test embeds",
   aliases: ["et"],
   channelType: "all",
   positional: [

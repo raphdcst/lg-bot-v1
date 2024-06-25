@@ -7,6 +7,8 @@ export enum EmbedColors {
   ERROR = 0xc60800
 }
 
+export type EmbedColor = keyof typeof EmbedColors
+
 export type smallEmbedOptions = {
   description: string
   bot?: app.ClientUser
@@ -18,9 +20,6 @@ export type errorEmbedOptions = {
   bot?: app.ClientUser
   color?: EmbedColor
 }
-
-
-export type EmbedColor = keyof typeof EmbedColors
 
 
 export function createSmallEmbed(options: smallEmbedOptions): app.APIEmbed {
