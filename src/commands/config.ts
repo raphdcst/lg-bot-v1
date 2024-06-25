@@ -9,7 +9,7 @@ export default new app.Command({
 
     const msg = message as app.Message<true>
 
-    await app.fetchGuild(msg)
+    await app.configServ(msg)
 
   }
 })
