@@ -1,9 +1,9 @@
 import * as app from "#app"
 
-export async function createGame(message: app.Message) {
+export async function createGameWithInteraction(interaction: app.Interaction) {
 
-    const author = message.author
-    const bot = message.client.user
+    const author = interaction.user
+    const bot = interaction.client.user
     const gameId = app.genId(5)
 
     const StartButton = new app.ButtonBuilder()
@@ -70,8 +70,6 @@ export async function createGame(message: app.Message) {
     try {
 
         const startConfigResponse = await author.send({ embeds: [createGameEmbed], components: [createGameRow] })
-
-        await message.reply('Your received a DM to start the config of your game !')
 
         const startConfigCollector = startConfigResponse.createMessageComponentCollector({ componentType: app.ComponentType.Button, time: 120_000 })
 
