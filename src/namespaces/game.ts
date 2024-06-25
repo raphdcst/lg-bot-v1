@@ -83,9 +83,9 @@ export async function createGame(message: app.Message) {
 
             if (i.customId === 'leave') {
 
-                const leaveEmbed = await app.sendSmallEmbed('Leaving game config !', bot)
+                const leaveEmbed = app.createSmallEmbed({ description: 'Leaving game config !', bot: bot })
 
-                await i.reply({embeds: [leaveEmbed]})
+                await i.reply({ embeds: [leaveEmbed] })
 
                 return startConfigCollector.stop()
             }
@@ -141,9 +141,9 @@ export async function createGame(message: app.Message) {
 
                         app.interactionLogger.error(e)
 
-                        const errorEmbed = await app.sendErrorEmbed(err, bot)
+                        const errorEmbed = app.createErrorEmbed({ err: err, bot: bot })
 
-                        return await author.send({ embeds: [errorEmbed]})
+                        return await author.send({ embeds: [errorEmbed] })
                     })
             }
 
@@ -151,9 +151,9 @@ export async function createGame(message: app.Message) {
 
         startConfigCollector.on('end', async (collected) => {
 
-            const endEmbed = await app.sendSmallEmbed(`Collected ${collected.size} interactions.`, bot)
+            const endEmbed = app.createSmallEmbed({ description: `Collected ${collected.size} interactions.`, bot: bot })
 
-            await author.send({ embeds: [endEmbed]})
+            await author.send({ embeds: [endEmbed] })
 
             return app.interactionLogger.log(`Collected ${collected.size} interactions.`);
 
@@ -162,8 +162,8 @@ export async function createGame(message: app.Message) {
 
         const err = e as Error
 
-        const errorEmbed =  await app.sendErrorEmbed(err, bot)
+        const errorEmbed = app.createErrorEmbed({ err: err, bot: bot })
 
-        return await author.send({ embeds: [errorEmbed]})
+        return await author.send({ embeds: [errorEmbed] })
     }
 }
