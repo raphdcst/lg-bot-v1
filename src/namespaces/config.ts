@@ -66,33 +66,26 @@ export enum BaseLgGuildCategories {
 export type BaseLgGuildCategory = keyof typeof BaseLgGuildCategories
 
 
-export class BaseChannelProps {
+export interface BaseChannelProps {
     NAME: string
     TYPE: app.ChannelType.GuildText | app.ChannelType.GuildVoice | app.ChannelType.GuildCategory | app.ChannelType.GuildAnnouncement | app.ChannelType.GuildStageVoice | app.ChannelType.GuildForum | app.ChannelType.GuildMedia
-    CATEGORY?: string
-
-    constructor() {
-        this.NAME = "basic-channel"
-        this.TYPE = app.ChannelType.GuildText
-    }
+    CATEGORY: string
 }
 
-export class FAQ_FORUM_PROPS extends BaseChannelProps {
-    
-    super() {
-        this.NAME = "🆘-faq",
-        this.TYPE = app.ChannelType.GuildForum
-        this.CATEGORY = BaseLgGuildCategories.HELP_CATEGORY        
-    }
+export const FAQ_FORUM: BaseChannelProps = {
+
+    NAME: "🆘-faq",
+    TYPE: app.ChannelType.GuildForum,
+    CATEGORY: BaseLgGuildCategories.HELP_CATEGORY
+
 }
 
-export class ANNOUNCEMENT_CHANNEL_PROPS extends BaseChannelProps {
+export const ANNOUNCEMENT_CHANNEL: BaseChannelProps = {
 
-    super() {
-        this.NAME = "📢-announcement",
-        this.TYPE = app.ChannelType.GuildAnnouncement
-        this.CATEGORY = BaseLgGuildCategories.INFOS_CATEGORY        
-    }
+        NAME: "📢-announcement",
+        TYPE: app.ChannelType.GuildAnnouncement,
+        CATEGORY: BaseLgGuildCategories.INFOS_CATEGORY
+
 }
 
 
@@ -107,13 +100,25 @@ export async function fetchAndDeleteGuild(guild: app.Guild) {
                     .then((channel) => {
                         app.deleteLogger.success(`Deleted "${channel.name}" in "${guild.name}" (${guild.id})`)
                     })
-                    .catch((err) => {
+                    .catch((e) => {
+
+                        const err = e as app.DiscordAPIError
+
+                        if (err.code === 50074) {
+
+                            return app.deleteLogger.log(`${err.name} : ${err.message} in "${guild.name}" (${guild.id})`)
+
+                        }
+
                         app.deleteLogger.error(`Failed to delete channel in "${guild.name}" (${guild.id})`)
                         return console.error(err)
                     })
             })
         })
-        .catch((err) => {
+        .catch((e) => {
+
+            const err = e as app.DiscordAPIError
+
             app.fetchLogger.error(`Failed to fetch channels in "${guild.name}" (${guild.id})`)
             return console.error(err)
         })
@@ -149,11 +154,7 @@ export async function createChannels(guild: app.Guild, categories: app.CategoryC
 
     const voiceChannels = BaseLgGuildVoiceChannels
 
-    const faqForum = new FAQ_FORUM_PROPS()
-
-    const announcementChannel = new ANNOUNCEMENT_CHANNEL_PROPS()
-
-    const customChannels = [faqForum, announcementChannel]
+    const customChannels = [FAQ_FORUM, ANNOUNCEMENT_CHANNEL]
 
     Object.values(textChannels).forEach(async (v, index) => {
 
@@ -184,7 +185,7 @@ export async function createChannels(guild: app.Guild, categories: app.CategoryC
         })
             .then(async (channel) => {
 
-                await channel.setParent(categories[2].id)
+                await channel.setParent(categories[4].id)
 
                 app.createLogger.success(`Created ${key} named "${channel.name}" in "${guild.name}" (${guild.id})`)
             })
@@ -194,7 +195,7 @@ export async function createChannels(guild: app.Guild, categories: app.CategoryC
             })
     })
 
-    Object.entries(customChannels).forEach(async ([key, value]) => {
+    Object.values(customChannels).forEach(async (value) => {
         await guild.channels.create({
             name: value.NAME,
             type: value.TYPE
@@ -206,10 +207,10 @@ export async function createChannels(guild: app.Guild, categories: app.CategoryC
 
                 await channel.setParent(catId[0].id)
 
-                app.createLogger.success(`Created ${key} named "${channel.name}" in "${guild.name}" (${guild.id})`)
+                app.createLogger.success(`Created CUSTOM_CHANNEL named "${channel.name}" in "${guild.name}" (${guild.id})`)
             })
             .catch((err) => {
-                app.createLogger.error(`Failed to create ${key} in "${guild.name}" (${guild.id})`)
+                app.createLogger.error(`Failed to create CUSTOM_CHANNEL in "${guild.name}" (${guild.id})`)
                 return console.error(err)
             })
     })
