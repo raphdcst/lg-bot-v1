@@ -3,6 +3,7 @@ import { Options } from "discord.js"
 import env from "#env"
 
 const config: Config = {
+  logger: {},
   ignoreBots: true,
   getPrefix() {
     return env.BOT_PREFIX!
