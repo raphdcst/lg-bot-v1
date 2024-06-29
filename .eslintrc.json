@@ -1,13 +1,7 @@
 {
   "parser": "@typescript-eslint/parser",
-  "extends": [
-    "eslint:recommended",
-    "plugin:@typescript-eslint/recommended"
-  ],
-  "plugins": [
-    "@typescript-eslint",
-    "import"
-  ],
+  "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended"],
+  "plugins": ["@typescript-eslint", "import"],
   "rules": {
     "import/extensions": [
       "error",
@@ -24,13 +18,18 @@
       "error",
       {
         "ignore": [
-          "^#app$"
+          "^#app$",
+          "^#config$",
+          "^#env$",
+          "^#client$",
+          "^#logger$",
+          "^#database$"
         ]
       }
     ],
     "@typescript-eslint/no-unused-vars": "warn",
     "@typescript-eslint/no-explicit-any": "off",
-    "no-prototype-builtins":  "off",
+    "no-prototype-builtins": "off",
     "no-control-regex": "off",
     "no-misleading-character-class": "off",
     "no-empty": "off"
@@ -39,7 +38,8 @@
     "import/resolver": {
       "alias": {
         "map": [
-          ["#tables", "./src/tables"]
+          ["#tables", "./src/tables"],
+          ["#src", "./src"]
         ],
         "extensions": [".ts", ".js", ".jsx", ".tsx"]
       },

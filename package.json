@@ -9,7 +9,13 @@
   "imports": {
     "#app": "./dist/app.js",
     "#app/*": "./dist/*",
-    "#tables/*": "./dist/tables/*"
+    "#tables/*": "./dist/tables/*",
+    "#env": "./dist/app/env.js",
+    "#config": "./dist/config.js",
+    "#client": "./dist/app/client.js",
+    "#logger": "./dist/app/logger.js",
+    "#database": "./dist/app/database.js",
+    "#src/*": "./dist/*"
   },
   "scripts": {
     "build": "gulp build",
@@ -20,7 +26,8 @@
     "update": "gulp update",
     "readme": "gulp readme",
     "test": "npm run lint && tsc --noEmit && npm run start.test",
-    "lint": "eslint src/**/*.ts --fix"
+    "lint": "eslint src/**/*.ts --fix",
+    "bot": "npx @ghom/bot.ts-cli"
   },
   "prettier": {
     "semi": false,
@@ -38,7 +45,7 @@
   "dependencies": {
     "@discordjs/rest": "^0.5.0",
     "@ghom/handler": "^3.1.0",
-    "@ghom/logger": "^1.2.0",
+    "@ghom/logger": "^2.0.1",
     "@ghom/orm": "^1.7.0",
     "boxen": "^7.0.0",
     "chalk": "^5.0.1",
@@ -58,7 +65,9 @@
     "simple-git": "^3.24.0",
     "tims": "^2.1.0",
     "types-package-json": "^2.0.39",
-    "yargs-parser": "^21.0.1"
+    "yargs-parser": "^21.0.1",
+    "del": "^6.1.1",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@esbuild/linux-x64": "^0.20.1",

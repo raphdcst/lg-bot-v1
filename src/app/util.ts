@@ -18,9 +18,10 @@ import relative from "dayjs/plugin/relativeTime.js"
 import timezone from "dayjs/plugin/timezone.js"
 import toObject from "dayjs/plugin/toObject.js"
 
-import * as logger from "./logger.ts"
-import * as config from "./config.ts"
-import * as client from "./client.ts"
+import env from "#env"
+import client from "#client"
+import config from "#config"
+import logger from "#logger"
 
 export type PermissionsNames = keyof typeof v10.PermissionFlagsBits
 
@@ -84,7 +85,7 @@ export async function checkUpdates() {
   }
 }
 
-const locale = process.env.BOT_LOCALE
+const locale = env.BOT_LOCALE
 
 import(`dayjs/locale/${locale ?? "en"}.js`)
   .then(() => dayjs.locale(locale ?? "en"))
@@ -102,7 +103,7 @@ dayjs.extend(timezone)
 dayjs.extend(toObject)
 dayjs.utc(1)
 
-if (process.env.BOT_TIMEZONE) dayjs.tz.setDefault(process.env.BOT_TIMEZONE)
+if (env.BOT_TIMEZONE) dayjs.tz.setDefault(env.BOT_TIMEZONE)
 
 export { dayjs }
 
@@ -460,13 +461,9 @@ const defaultSystemEmojis: SystemEmojis = {
 }
 
 export function getSystemEmoji(name: keyof SystemEmojis): string {
-  const rawEmoji =
-    config.getConfig().systemEmojis?.[name] ?? defaultSystemEmojis[name]
+  const rawEmoji = config.systemEmojis?.[name] ?? defaultSystemEmojis[name]
 
-  return (
-    client.ClientSingleton.get().emojis.resolve(rawEmoji)?.toString() ??
-    rawEmoji
-  )
+  return client.emojis.resolve(rawEmoji)?.toString() ?? rawEmoji
 }
 
 export interface SystemMessageOptions {
@@ -624,7 +621,7 @@ export function getSystemMessage<Key extends keyof SystemMessages>(
     ? Options
     : never,
 ): Promise<SystemMessage> {
-  return (
-    config.getConfig().systemMessages?.[name] ?? defaultSystemMessages[name]
-  )(options as any)
+  return (config.systemMessages?.[name] ?? defaultSystemMessages[name])(
+    options as any,
+  )
 }

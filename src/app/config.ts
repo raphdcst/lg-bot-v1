@@ -4,11 +4,9 @@ import type * as discord from "discord.js"
 
 import type * as pagination from "./pagination.ts"
 import type * as command from "./command.ts"
+import type * as logger from "./logger.ts"
 import type * as slash from "./slash.ts"
-
-import * as util from "./util.ts"
-
-import { config } from "../config.ts"
+import type * as util from "./util.ts"
 
 export interface Config {
   /**
@@ -67,19 +65,9 @@ export interface Config {
    * Custom messages for the system
    */
   systemMessages?: Partial<util.SystemMessages>
-}
 
-const finalConfig: {
-  data: Config | null
-} = {
-  data: null,
-}
-
-export function getConfig() {
-  if (!finalConfig.data) throw new Error("Config not initialized")
-  return finalConfig.data
-}
-
-export async function initConfig() {
-  finalConfig.data = await util.scrap(config)
+  /**
+   * Custom options for the system logger
+   */
+  logger?: logger.LoggerOptions
 }

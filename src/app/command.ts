@@ -12,10 +12,11 @@ import * as handler from "@ghom/handler"
 import * as util from "./util.ts"
 import * as logger from "./logger.ts"
 import * as argument from "./argument.ts"
-import * as config from "./config.ts"
+
+import env from "#env"
+import config from "#config"
 
 import { filename } from "dirname-filename-esm"
-
 const __filename = filename(import.meta)
 
 export const commandHandler = new handler.Handler(
@@ -476,7 +477,7 @@ export async function prepareCommand(
     if (util.scrap(cmd.options.guildOwnerOnly, message))
       if (
         message.guild.ownerId !== message.member.id &&
-        process.env.BOT_OWNER !== message.member.id
+        env.BOT_OWNER !== message.member.id
       )
         return util.getSystemMessage("error", {
           author: {
@@ -569,7 +570,7 @@ export async function prepareCommand(
       })
 
   if (await util.scrap(cmd.options.botOwnerOnly, message))
-    if (process.env.BOT_OWNER !== message.author.id)
+    if (env.BOT_OWNER !== message.author.id)
       return util.getSystemMessage("error", {
         author: {
           name: "You must be my owner.",
@@ -840,7 +841,7 @@ export async function sendCommandDetails(
   message: IMessage,
   cmd: ICommand,
 ): Promise<void> {
-  const { detailCommand, openSource } = config.getConfig()
+  const { detailCommand, openSource } = config
 
   if (detailCommand) {
     const options = await detailCommand(message, cmd)
